@@ -6,17 +6,17 @@ go-pandoc
 ## Run at local
 
 ```bash
-> go get github.com/gogap/go-pandoc
-> cd $GOPATH/src/github.com/gogap/go-pandoc
+> go get github.com/pschlump/go-pandoc
+> cd $GOPATH/src/github.com/pschlump/go-pandoc
 > go build
-> ./go-pandoc run -c app.conf
+> ./go-pandoc run --config app.conf
 ```
 
 ## Run at docker
 
  ```bash
  docker pull idocking/go-pandoc:latest
- docker run -it -d -p 8080:8080 idocking/go-pandoc:latest ./go-pandoc run
+ docker run -it -d -p 9092:9092 idocking/go-pandoc:latest ./go-pandoc run
  ```
 
 or
@@ -25,9 +25,9 @@ or
  docker-compose up -d
  ```
 
-> then you could access the 8080 port
+> then you could access the 9092 port
 > in osx, you could get the docker ip by command `docker-machine ip`, 
-> and the access service by IP:8080
+> and the access service by IP:9092
 
 ## Config
 
@@ -37,7 +37,7 @@ or
 {
 
 	service {
-		path = "/v1"
+		path = "/api/v1"
 		
 		cors {
 			allowed-origins = ["*"]
@@ -50,7 +50,7 @@ or
 		}
 
 		http {
-			address = ":8080"
+			address = ":9092"
 			enabled = true
 		}
 
@@ -166,7 +166,7 @@ the converter is the following json struct
 
 ```bash
 curl -X POST \
-  http://IP:8080/v1/convert \
+  http://IP:9092/v1/convert \
   -H 'accept-encoding: gzip' \
   -H 'cache-control: no-cache' \
   -H 'content-type: application/json' \
@@ -280,7 +280,7 @@ binary|you cloud use curl to download directly
 
 ```bash
 curl -X POST \
-  http://IP:8080/v1/convert \
+  http://IP:9092/v1/convert \
   -H 'accept-encoding: gzip' \
   -H 'cache-control: no-cache' \
   -H 'content-type: application/json' \
@@ -297,7 +297,7 @@ curl -X POST \
 
 ```bash
 curl -X POST \
-  http://IP:8080/v1/convert \
+  http://IP:9092/v1/convert \
   -H 'accept-encoding: gzip' \
   -H 'cache-control: no-cache' \
   -H 'content-type: application/json' \
@@ -320,7 +320,7 @@ the request contain data
 
 ```bash
 curl -X POST \
-  http://IP:8080/v1/convert \
+  http://IP:9092/v1/convert \
   -H 'accept-encoding: gzip' \
   -H 'cache-control: no-cache' \
   -H 'content-type: application/json' \
@@ -374,7 +374,7 @@ Fetch data by http driver
 
 ```bash
 curl -X POST \
-  http://IP:8080/v1/convert \
+  http://IP:9092/v1/convert \
   -H 'cache-control: no-cache' \
   -H 'content-type: application/json' \
   -d '{
@@ -448,8 +448,8 @@ step 3: import driver and rebuild
 
 ```go
 import (
-	_ "github.com/gogap/go-pandoc/pandoc/fetcher/data"
-	_ "github.com/gogap/go-pandoc/pandoc/fetcher/http"
+	_ "github.com/pschlump/go-pandoc/pandoc/fetcher/data"
+	_ "github.com/pschlump/go-pandoc/pandoc/fetcher/http"
 )
 ```
 
@@ -459,7 +459,7 @@ import (
 
 # Use this package as libary
 
-Just import `github.com/gogap/go-pandoc/pandoc`
+Just import `github.com/pschlump/go-pandoc/pandoc`
 
 ```go
 pdoc, err := pandoc.New(conf)
