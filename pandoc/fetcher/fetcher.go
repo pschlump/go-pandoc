@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/gogap/config"
+	"github.com/pschlump/go-pandoc/config"
 )
 
 type Fetcher interface {

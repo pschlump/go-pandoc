@@ -13,10 +13,10 @@ import (
 	"time"
 
 	"github.com/TV4/graceful"
-	"github.com/gogap/config"
-	"github.com/gogap/go-pandoc/pandoc"
 	"github.com/gorilla/mux"
 	"github.com/phyber/negroni-gzip/gzip"
+	"github.com/pschlump/go-pandoc/config"
+	"github.com/pschlump/go-pandoc/pandoc"
 	"github.com/rs/cors"
 	"github.com/spf13/cast"
 	"github.com/urfave/negroni"
@@ -171,6 +171,14 @@ func New(conf config.Configuration) (srv *PandocServer, err error) {
 		func(rw http.ResponseWriter, req *http.Request) {
 			rw.Header().Set("Content-Type", "text/plain; charset=utf-8")
 			rw.Write([]byte("pong"))
+		},
+	)
+
+	r.PathPrefix(pathPrefix).Path("/status").
+		Methods("GET", "HEAD", "POST").HandlerFunc(
+		func(rw http.ResponseWriter, req *http.Request) {
+			rw.Header().Set("Content-Type", "application/json; charset=utf-8")
+			rw.Write([]byte(`{"status":"success"}` + "\n"))
 		},
 	)
 

@@ -4,14 +4,11 @@ import (
 	"log"
 	"os"
 
-	"github.com/gogap/config"
-	"github.com/gogap/go-pandoc/server"
+	"github.com/pschlump/go-pandoc/config"
+	_ "github.com/pschlump/go-pandoc/pandoc/fetcher/data"
+	_ "github.com/pschlump/go-pandoc/pandoc/fetcher/http"
+	"github.com/pschlump/go-pandoc/server"
 	"github.com/urfave/cli"
-)
-
-import (
-	_ "github.com/gogap/go-pandoc/pandoc/fetcher/data"
-	_ "github.com/gogap/go-pandoc/pandoc/fetcher/http"
 )
 
 func main() {
@@ -28,16 +25,16 @@ func main() {
 
 	app.Usage = "A server for pandoc command"
 	app.Commands = cli.Commands{
-		&cli.Command{
+		cli.Command{
 			Name:   "run",
 			Usage:  "run pandoc service",
 			Action: run,
 			Flags: []cli.Flag{
 				&cli.StringFlag{
-					Name:    "config",
-					Aliases: []string{"c"},
-					Usage:   "config filename",
-					Value:   "app.conf",
+					Name: "config",
+					// Aliases: []string{"c"},		// xyzzy - fix this
+					Usage: "config filename",
+					Value: "app.conf",
 				},
 				&cli.StringFlag{
 					Name:  "cwd",

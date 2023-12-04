@@ -3,8 +3,8 @@ package data
 import (
 	"fmt"
 
-	"github.com/gogap/config"
-	"github.com/gogap/go-pandoc/pandoc/fetcher"
+	"github.com/pschlump/go-pandoc/config"
+	"github.com/pschlump/go-pandoc/pandoc/fetcher"
 )
 
 type DataFetcher struct {

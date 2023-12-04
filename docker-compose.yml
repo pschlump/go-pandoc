@@ -2,7 +2,7 @@ server:
     image: idocking/go-pandoc:latest
     command: ["./go-pandoc", "run"]
     ports:
-      - 8080:8080
+      - 9092:9092
     volumes:
       - ./templates:/app/templates
       - ./data:/app/data
