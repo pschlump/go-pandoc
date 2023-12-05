@@ -3,8 +3,12 @@
 # A simple "data" based test that returns Hello text.
 
 # Generate a key for Redis
-redisKey="IyMjIEhlbGxvCgo+IEdvLVBhbmRvYw=="
-redisKey="abc"
+# redisKey="IyMjIEhlbGxvCgo+IEdvLVBhbmRvYw=="
+# redisKey="abc"
+
+( cd tools/gen-uuid ; go build )
+( cd tools/set-redis ; go build )
+redisKey="go-pandoc:$(tools/gen-uuid/gen-uuid)"
 
 # Set the value in reids fo rthe markdown data.
 # - ttl of 10 min on key
@@ -32,10 +36,10 @@ curl -X POST \
 	    \"to\":   \"pdf\",
 	    \"standalone\": true,
 	    \"variable\":{
-	    	\"CJKmainfont\": \"Vera\",
-	    	\"mainfont\":    \"Vera\",
-	    	\"sansfont\":    \"Vera\",
-	    	\"geometry:margin\":\"1cm\",
+	    	\"CJKmainfont\": \"Liberation Sans\",
+	    	\"mainfont\":    \"Liberation Sans\",
+	    	\"sansfont\":    \"Liberation Sans\",
+	    	\"geometry:margin\":\"1mm\",
 	    	\"subject\":\"gsjbxx\"
 	    },
 	    \"template\": \"/Users/philip/go/src/github.com/pschlump/go-pandoc/data/docs.template\"
