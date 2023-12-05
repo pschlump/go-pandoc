@@ -5,9 +5,7 @@ import (
 	"strings"
 )
 
-var (
-	providers = make(map[string]NewConfigProviderFunc)
-)
+var providers = make(map[string]NewConfigProviderFunc)
 
 type NewConfigProviderFunc func() (ConfigurationProvider, error)
 

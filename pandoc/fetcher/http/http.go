@@ -5,8 +5,10 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"os"
 	"strings"
 
+	"github.com/pschlump/dbgo"
 	"github.com/pschlump/go-pandoc/config"
 	"github.com/pschlump/go-pandoc/pandoc/fetcher"
 )
@@ -61,7 +63,9 @@ func NewHttpFetcher(conf config.Configuration) (httpFetcher fetcher.Fetcher, err
 
 func (p *HttpFetcher) Fetch(fetchParams fetcher.FetchParams) (data []byte, err error) {
 
-	params := Params{}
+	dbgo.Fprintf(os.Stderr, "%(red)%(LF) - fetching using 'http' protocal\n")
+
+	var params Params
 
 	err = fetchParams.Unmarshal(&params)
 	if err != nil {

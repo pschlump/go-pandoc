@@ -2,7 +2,9 @@ package data
 
 import (
 	"fmt"
+	"os"
 
+	"github.com/pschlump/dbgo"
 	"github.com/pschlump/go-pandoc/config"
 	"github.com/pschlump/go-pandoc/pandoc/fetcher"
 )
@@ -38,7 +40,9 @@ func NewDataFetcher(conf config.Configuration) (dataFetcher fetcher.Fetcher, err
 
 func (p *DataFetcher) Fetch(fetchParams fetcher.FetchParams) (data []byte, err error) {
 
-	params := Params{}
+	dbgo.Fprintf(os.Stderr, "%(red)%(LF) - fetching using 'data' protocal\n")
+
+	var params Params
 
 	err = fetchParams.Unmarshal(&params)
 	if err != nil {

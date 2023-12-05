@@ -4,11 +4,13 @@ import (
 	"log"
 	"os"
 
+	"github.com/pschlump/dbgo"
 	"github.com/pschlump/go-pandoc/config"
 	_ "github.com/pschlump/go-pandoc/pandoc/fetcher/data"
 	_ "github.com/pschlump/go-pandoc/pandoc/fetcher/http"
+	_ "github.com/pschlump/go-pandoc/pandoc/fetcher/redis"
 	"github.com/pschlump/go-pandoc/server"
-	"github.com/urfave/cli"
+	"github.com/urfave/cli/v2"
 )
 
 func main() {
@@ -25,16 +27,16 @@ func main() {
 
 	app.Usage = "A server for pandoc command"
 	app.Commands = cli.Commands{
-		cli.Command{
+		&cli.Command{
 			Name:   "run",
 			Usage:  "run pandoc service",
 			Action: run,
 			Flags: []cli.Flag{
 				&cli.StringFlag{
-					Name: "config",
-					// Aliases: []string{"c"},		// xyzzy - fix this
-					Usage: "config filename",
-					Value: "app.conf",
+					Name:    "config",
+					Aliases: []string{"c"},
+					Usage:   "config filename",
+					Value:   "app.conf",
 				},
 				&cli.StringFlag{
 					Name:  "cwd",
@@ -63,6 +65,9 @@ func run(ctx *cli.Context) (err error) {
 	conf := config.NewConfig(
 		config.ConfigFile(configFile),
 	)
+
+	pandoc := conf.GetString("xyzzy-xyzzy", "ya")
+	dbgo.Printf("%(cyan)->%s<-\n", pandoc)
 
 	srv, err := server.New(conf)
 

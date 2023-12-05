@@ -46,6 +46,7 @@ func (p *File) Path() (filename string, err error) {
 				p.path, p.lastError = p.base64dataToFile()
 				p.shouldCleanup = true
 			case "file", "":
+				// xyzzy - this is week - need to clean u.Path first!
 				if !strings.HasPrefix(u.Path, p.SafeDir) {
 					p.lastError = fmt.Errorf("file path is not in safe dir")
 				} else {
@@ -65,7 +66,6 @@ func (p *File) downloadToFile() (fname string, err error) {
 	cli := http.DefaultClient
 
 	resp, err := cli.Get(p.Url)
-
 	if err != nil {
 		err = fmt.Errorf("download file failure for url %s, error: %s", p.Url, err)
 		return
@@ -76,7 +76,6 @@ func (p *File) downloadToFile() (fname string, err error) {
 	ct := resp.Header.Get("Content-Type")
 
 	filename, err := p.urlToFileName(p.Url, ct)
-
 	if err != nil {
 		return
 	}
@@ -88,7 +87,6 @@ func (p *File) downloadToFile() (fname string, err error) {
 	}
 
 	fname, err = p.writeToTempFile(filename, data)
-
 	if err != nil {
 		return
 	}
@@ -111,7 +109,6 @@ func (p *File) urlToFileName(fileUrl, contentType string) (ret string, err error
 	}
 
 	ext := filepath.Ext(filename)
-
 	if len(ext) == 0 {
 		if len(contentType) > 0 {
 			exts, _ := mime.ExtensionsByType(contentType)
@@ -132,7 +129,6 @@ func (p *File) writeToTempFile(filename string, data []byte) (fname string, err 
 	dir := filepath.Join(tmpDir, p.TempDirPrefix)
 
 	err = os.MkdirAll(dir, 0755)
-
 	if err != nil {
 		err = fmt.Errorf("make temp dir failure: %s, error: %s", dir, err)
 		return
@@ -141,7 +137,6 @@ func (p *File) writeToTempFile(filename string, data []byte) (fname string, err 
 	tempFileName := filepath.Join(dir, filename)
 
 	err = ioutil.WriteFile(tempFileName, data, 0644)
-
 	if err != nil {
 		err = fmt.Errorf("write file %s failure", tempFileName)
 		return
@@ -156,13 +151,11 @@ func (p *File) parseBase64Data() (contentType string, data []byte, err error) {
 	regExp := `data:(.*?);(.*?),(.*)`
 
 	reg, err := regexp.Compile(regExp)
-
 	if err != nil {
 		return
 	}
 
 	matched := reg.FindAllStringSubmatch(p.Url, -1)
-
 	if len(matched) != 1 && len(matched[0]) != 4 {
 		err = fmt.Errorf("base64 data format error, the format should be: %s", "data:content-type;encoding,base64string")
 		return
@@ -189,13 +182,11 @@ func (p *File) base64dataToFile() (fname string, err error) {
 	}
 
 	filename, err := p.urlToFileName(uuid.New().String(), ct)
-
 	if err != nil {
 		return
 	}
 
 	fname, err = p.writeToTempFile(filename, data)
-
 	if err != nil {
 		return
 	}

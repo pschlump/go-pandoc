@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"github.com/pborman/uuid"
+	"github.com/pschlump/dbgo"
 	"github.com/pschlump/go-pandoc/config"
 	"github.com/pschlump/go-pandoc/pandoc/fetcher"
 )
@@ -589,6 +590,8 @@ type Pandoc struct {
 	enableLuaFilter bool
 
 	safeDir string
+
+	pandocPath string
 }
 
 func New(conf config.Configuration) (pandoc *Pandoc, err error) {
@@ -650,6 +653,7 @@ func New(conf config.Configuration) (pandoc *Pandoc, err error) {
 	pdoc.ignoreArgs = conf.GetBoolean("ignore-args")
 	pdoc.enableFilter = conf.GetBoolean("enable-filter")
 	pdoc.enableLuaFilter = conf.GetBoolean("enable-lua-filter")
+	pdoc.pandocPath = conf.GetString("pandoc-path", "pandoc")
 
 	cwd, err := os.Getwd()
 	if err != nil {
@@ -719,9 +723,13 @@ func (p *Pandoc) Convert(fetcherOpts FetcherOptions, convertOpts ConvertOptions)
 
 	args = append(args, []string{"--quiet", tmpInput, "--output", tmpOutpout}...)
 
-	_, err = execCommand(p.timeout, "pandoc", args...)
+	// xyzzy - hard path to pandoc!
+	// 		/usr/local/bin/pandoc
+	pandoc := p.pandocPath
 
-	if err != nil {
+	dbgo.Fprintf(os.Stderr, "%(cyan)%(LF) just before execute, %q, %s\n", pandoc, dbgo.SVar(args))
+
+	if _, err = execCommand(p.timeout, pandoc, args...); err != nil {
 		return
 	}
 
