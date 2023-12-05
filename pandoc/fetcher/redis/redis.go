@@ -1,15 +1,20 @@
 package redis
 
 import (
+	"context"
 	"fmt"
 	"os"
 
 	"github.com/pschlump/dbgo"
 	"github.com/pschlump/go-pandoc/config"
 	"github.com/pschlump/go-pandoc/pandoc/fetcher"
+	"github.com/redis/go-redis/v9"
 )
 
+var ctx context.Context
+
 type RedisFetcher struct {
+	rdb *redis.Client
 }
 
 type Params struct {
@@ -28,20 +33,33 @@ func init() {
 	if err := fetcher.RegisterFetcher("redis", NewRedisFetcher); err != nil {
 		panic(err)
 	}
+	ctx = context.Background()
 }
 
 func NewRedisFetcher(conf config.Configuration) (dataFetcher fetcher.Fetcher, err error) {
-	dataFetcher = &RedisFetcher{}
+	var me RedisFetcher
 
 	// get config stuff
-	redisConnectionString := conf.GetString("connect", "bad-missing-connection-string")
+	redisHostPort := conf.GetString("connect", "bad-missing-connection-string")
 	redisAuth := conf.GetString("auth", "")
-	dbgo.Printf("%(LF)%(green) Redis Connection String ->%s<-\n", redisConnectionString)
+	dbgo.Printf("%(LF)%(green) Redis Connection String ->%s<-\n", redisHostPort)
 	dbgo.Printf("%(LF)%(green) Redis Auth ->%s<-\n", redisAuth)
 
-	// xyzzy - connect to redis
+	// connect to redis
+	if redisAuth != "" {
+		me.rdb = redis.NewClient(&redis.Options{
+			Addr:     redisHostPort,
+			Password: redisAuth,
+			DB:       0, // 0 is default DB
+		})
+	} else {
+		me.rdb = redis.NewClient(&redis.Options{
+			Addr: redisHostPort,
+			DB:   0,
+		})
+	}
 
-	return
+	return &me, nil
 }
 
 func (p *RedisFetcher) Fetch(fetchParams fetcher.FetchParams) (data []byte, err error) {
@@ -59,6 +77,8 @@ func (p *RedisFetcher) Fetch(fetchParams fetcher.FetchParams) (data []byte, err 
 	}
 
 	// xyzzy - need to do a "get" from redis.
+	x, err := p.rdb.Get(ctx, "a").Result()
+	dbgo.Printf("%(LF)%(red) x = %s, err=%s\n", x, err)
 
 	data = params.RedisKey
 
