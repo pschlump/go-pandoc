@@ -6,24 +6,24 @@ go-pandoc
 ## Run at local
 
 ```bash
-> go get github.com/pschlump/go-pandoc
-> cd $GOPATH/src/github.com/pschlump/go-pandoc
-> go build
-> ./go-pandoc run --config app.conf
+    > go get github.com/pschlump/go-pandoc
+    > cd $GOPATH/src/github.com/pschlump/go-pandoc
+    > go build
+    > ./go-pandoc run --config app.conf
 ```
 
 ## Run at docker
 
- ```bash
- docker pull idocking/go-pandoc:latest
- docker run -it -d -p 9092:9092 idocking/go-pandoc:latest ./go-pandoc run
- ```
+```bash
+    docker pull idocking/go-pandoc:latest
+    docker run -it -d -p 9092:9092 idocking/go-pandoc:latest ./go-pandoc run
+```
 
 or
 
- ```bash
- docker-compose up -d
- ```
+```bash
+    docker-compose up -d
+```
 
 > then you could access the 9092 port
 > in osx, you could get the docker ip by command `docker-machine ip`, 
@@ -99,7 +99,6 @@ or
 }
 ```
 
-q
 ## API
 
 ```json
@@ -467,6 +466,12 @@ pdoc, err := pandoc.New(conf)
 //...
 convData, err := pdoc.Convert(fetcherOpts, convertOpts)
 ```
+
+## Author
+
+Forked from a previous project at: TODO
+
+Philip Schlump, 2023.
 
 
 ## QA
