@@ -18,12 +18,14 @@ type RedisFetcher struct {
 }
 
 type Params struct {
-	RedisKey []byte `json:"rediskey"`
+	// RedisKey []byte `json:"rediskey"`
+	RedisKey string `json:"rediskey"`
 }
 
 func (p *Params) Validation() (err error) {
 	if len(p.RedisKey) == 0 {
 		err = fmt.Errorf("[fetcher-data]: params of reiskkey is empty")
+		dbgo.Printf("%(LF) error %s\n", err)
 		return
 	}
 	return
@@ -69,18 +71,25 @@ func (p *RedisFetcher) Fetch(fetchParams fetcher.FetchParams) (data []byte, err 
 	var params Params
 
 	if err = fetchParams.Unmarshal(&params); err != nil {
+		dbgo.Printf("%(LF) error %s\n", err)
 		return
 	}
 
 	if err = params.Validation(); err != nil {
+		dbgo.Printf("%(LF) error %s\n", err)
 		return
 	}
 
-	// xyzzy - need to do a "get" from redis.
-	x, err := p.rdb.Get(ctx, "a").Result()
-	dbgo.Printf("%(LF)%(red) x = %s, err=%s\n", x, err)
+	// need to do a "get" from redis.
+	x, err := p.rdb.Get(ctx, string(params.RedisKey)).Result()
+	dbgo.Printf("%(LF)%(cyan) key ->%s<- data = --->>>%s<<<---, err=%s\n", params.RedisKey, x, err)
+	if err != nil {
+		dbgo.Printf("%(LF)%(red) Error %s\n", err)
+		return
+	}
 
-	data = params.RedisKey
+	// data = params.RedisKey
+	data = []byte(x)
 
 	return
 }

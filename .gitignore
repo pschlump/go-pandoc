@@ -1,10 +1,7 @@
 ,*
-
+out
 go-pandoc
-
-*.sh
 *.pdf
-*.loggo-pandoc
 note.1
 x
 note.1

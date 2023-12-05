@@ -21,7 +21,7 @@ func (p *FetchParams) Unmarshal(v interface{}) (err error) {
 	err = json.Unmarshal([]byte(*p), v)
 
 	if err != nil {
-		err = fmt.Errorf("parse param failure, error is %s", err.Error())
+		err = fmt.Errorf("parse param failure, data ->%s<- error is %s", *p, err.Error())
 		return
 	}
 
