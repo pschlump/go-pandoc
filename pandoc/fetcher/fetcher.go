@@ -44,8 +44,7 @@ func New(name string, conf config.Configuration) (f Fetcher, err error) {
 
 func RegisterFetcher(name string, fn NewFetcherFunc) (err error) {
 
-	// xyzzy better
-	if len(name) == 0 {
+	if name == "" {
 		err = fmt.Errorf("fetcher driver name is empty")
 		return
 	}
@@ -55,10 +54,7 @@ func RegisterFetcher(name string, fn NewFetcherFunc) (err error) {
 		return
 	}
 
-	// xyzzy better, if ...
-	_, exist := newFetcherFuncs[name]
-
-	if exist {
+	if _, exist := newFetcherFuncs[name]; exist {
 		err = fmt.Errorf("driver of %s already exist", name)
 		return
 	}

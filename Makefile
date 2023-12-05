@@ -1,8 +1,9 @@
 
 all:
+	go vet
 	go build
 
 
-run:
-	./go-pandoc --config app.conf run
+run: all
+	./go-pandoc run --config app.conf 
 

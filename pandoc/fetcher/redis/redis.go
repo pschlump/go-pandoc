@@ -13,7 +13,6 @@ type RedisFetcher struct {
 }
 
 type Params struct {
-	// Data []byte `json:"data"`
 	RedisKey []byte `json:"rediskey"`
 }
 
@@ -34,7 +33,13 @@ func init() {
 func NewRedisFetcher(conf config.Configuration) (dataFetcher fetcher.Fetcher, err error) {
 	dataFetcher = &RedisFetcher{}
 
-	// xyzzy - get config stuff and connect to redis
+	// get config stuff
+	redisConnectionString := conf.GetString("connect", "bad-missing-connection-string")
+	redisAuth := conf.GetString("auth", "")
+	dbgo.Printf("%(LF)%(green) Redis Connection String ->%s<-\n", redisConnectionString)
+	dbgo.Printf("%(LF)%(green) Redis Auth ->%s<-\n", redisAuth)
+
+	// xyzzy - connect to redis
 
 	return
 }

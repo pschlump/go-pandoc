@@ -66,8 +66,8 @@ func run(ctx *cli.Context) (err error) {
 		config.ConfigFile(configFile),
 	)
 
-	pandoc := conf.GetString("xyzzy-xyzzy", "ya")
-	dbgo.Printf("%(cyan)->%s<-\n", pandoc)
+	authkey := conf.GetString("auth-key", "ya, no api key specified")
+	dbgo.Printf("Auth Key Is: %(cyan)->%s<-\n", authkey)
 
 	srv, err := server.New(conf)
 
