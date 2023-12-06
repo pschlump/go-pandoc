@@ -39,11 +39,10 @@ curl -X POST \
 	    	\"CJKmainfont\": \"Liberation Sans\",
 	    	\"mainfont\":    \"Liberation Sans\",
 	    	\"sansfont\":    \"Liberation Sans\",
-	    	\"pagestyle\":   \"empty\",
 	    	\"geometry:margin\":\"1mm\",
 	    	\"subject\":\"gsjbxx\"
 	    },
-	    \"template\": \"/Users/philip/go/src/github.com/pschlump/go-pandoc/data/docs.template\"
+	    \"template\": \"/Users/philip/go/src/github.com/pschlump/go-pandoc/data/docs2.template\"
 	},
 	\"template\": \"binary\"
 }" --compressed -o out/test-redis.pdf

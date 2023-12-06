@@ -33,8 +33,7 @@ curl -X POST \
 	},
 	\"converter\":{
 		\"from\": \"markdown\",
-	    \"to\":   \"pdf\",
-	    \"standalone\": true,
+	    \"to\":   \"rtf\",
 	    \"variable\":{
 	    	\"CJKmainfont\": \"Liberation Sans\",
 	    	\"mainfont\":    \"Liberation Sans\",
@@ -46,4 +45,4 @@ curl -X POST \
 	    \"template\": \"/Users/philip/go/src/github.com/pschlump/go-pandoc/data/docs.template\"
 	},
 	\"template\": \"binary\"
-}" --compressed -o out/test-redis.pdf
+}" --compressed -o out/test-redis.rtf
