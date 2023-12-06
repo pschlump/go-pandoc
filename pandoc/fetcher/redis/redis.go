@@ -14,17 +14,24 @@ import (
 var ctx context.Context
 
 type RedisFetcher struct {
-	rdb *redis.Client
+	rdb     *redis.Client
+	AuthKey string
 }
 
 type Params struct {
-	// RedisKey []byte `json:"rediskey"`
 	RedisKey string `json:"rediskey"`
+	AuthKey  string `json:"authkey"`
 }
 
-func (p *Params) Validation() (err error) {
-	if len(p.RedisKey) == 0 {
-		err = fmt.Errorf("[fetcher-data]: params of reiskkey is empty")
+func (param *Params) Validation(key string) (err error) {
+	if param.RedisKey == "" {
+		err = fmt.Errorf("[fetcher-redis]: params of reiskkey is empty")
+		dbgo.Printf("%(LF) error %s\n", err)
+		return
+	}
+	dbgo.Printf("%(yellow) param.AuthKey ->%s<- v.s. key ->%s<-\n", param.AuthKey, key)
+	if param.AuthKey != key {
+		err = fmt.Errorf("[fetcher-redis]: params of authkey did not match - not authorized")
 		dbgo.Printf("%(LF) error %s\n", err)
 		return
 	}
@@ -60,11 +67,13 @@ func NewRedisFetcher(conf config.Configuration) (dataFetcher fetcher.Fetcher, er
 			DB:   0,
 		})
 	}
+	me.AuthKey = os.Getenv(conf.GetString("auth-key"))
+	dbgo.Printf("%(LF)%(green)AuthKey = ->%s<-\n", me.AuthKey)
 
 	return &me, nil
 }
 
-func (p *RedisFetcher) Fetch(fetchParams fetcher.FetchParams) (data []byte, err error) {
+func (fetch *RedisFetcher) Fetch(fetchParams fetcher.FetchParams) (data []byte, err error) {
 
 	dbgo.Fprintf(os.Stderr, "%(red)%(LF) - fetching using 'redis' protocal\n")
 
@@ -75,13 +84,13 @@ func (p *RedisFetcher) Fetch(fetchParams fetcher.FetchParams) (data []byte, err 
 		return
 	}
 
-	if err = params.Validation(); err != nil {
+	if err = params.Validation(fetch.AuthKey); err != nil {
 		dbgo.Printf("%(LF) error %s\n", err)
 		return
 	}
 
 	// need to do a "get" from redis.
-	x, err := p.rdb.Get(ctx, string(params.RedisKey)).Result()
+	x, err := fetch.rdb.Get(ctx, string(params.RedisKey)).Result()
 	dbgo.Printf("%(LF)%(cyan) key ->%s<- data = --->>>%s<<<---, err=%s\n", params.RedisKey, x, err)
 	if err != nil {
 		dbgo.Printf("%(LF)%(red) Error %s\n", err)

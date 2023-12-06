@@ -4,7 +4,6 @@ import (
 	"log"
 	"os"
 
-	"github.com/pschlump/dbgo"
 	"github.com/pschlump/go-pandoc/config"
 	_ "github.com/pschlump/go-pandoc/pandoc/fetcher/data"
 	_ "github.com/pschlump/go-pandoc/pandoc/fetcher/http"
@@ -65,8 +64,8 @@ func run(ctx *cli.Context) (err error) {
 		config.ConfigFile(configFile),
 	)
 
-	authkey := conf.GetString("auth-key", "ya, no api key specified")
-	dbgo.Printf("Auth Key Is: %(cyan)->%s<-\n", authkey)
+	// authkey := conf.GetString("auth-key", "ya, no api key specified")
+	// dbgo.Printf("Auth Key Is: %(cyan)->%s<-\n", authkey)
 
 	srv, err := server.New(conf)
 

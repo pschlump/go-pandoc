@@ -14,6 +14,7 @@ redisKey="go-pandoc:$(tools/gen-uuid/gen-uuid)"
 # - ttl of 10 min on key
 ./tools/set-redis/set-redis "${redisKey}" test/redis1.md
 
+authKey="${GO_PANDOC_AUTH_KEY}"
 
 IP=127.0.0.1
 
@@ -28,7 +29,8 @@ curl -X POST \
 	\"fetcher\": {
 		\"name\": \"redis\",
 		\"params\": {
-			\"rediskey\": \"${redisKey}\"
+			\"rediskey\": \"${redisKey}\",
+			\"authkey\": \"${authKey}\"
 		}
 	},
 	\"converter\":{
