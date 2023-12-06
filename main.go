@@ -16,7 +16,6 @@ import (
 func main() {
 
 	var err error
-
 	defer func() {
 		if err != nil {
 			log.Printf("[go-pandoc]: %s\n", err.Error())

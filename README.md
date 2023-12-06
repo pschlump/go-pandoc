@@ -1,7 +1,7 @@
 go-pandoc
 ============
 
-# Run as a service
+# Run `pandoc` as a service
 
 ## Run at local
 
@@ -31,7 +31,7 @@ or
 
 ## Config
 
-`app.conf`
+Configuration is in a single file, `app.conf`.
 
 ```
 {
@@ -151,10 +151,10 @@ the converter is the following json struct
 
 ```json
 {
-  "from":"markdown",
-  "to": "pdf",
-  "pdf_engine": "xelatex"
-   ...
+    "from":"markdown",
+    "to": "pdf",
+    "pdf_engine": "xelatex"
+    ...
 }
 ```
 
@@ -469,9 +469,9 @@ convData, err := pdoc.Convert(fetcherOpts, convertOpts)
 
 ## Author
 
-Forked from a previous project at: TODO
+Forked from a previous project at: TODO, Auth is GoGap.
 
-Philip Schlump, 2023.
+Philip Schlump, 2023.  A significan number of changes.  Added test code.
 
 
 ## QA
